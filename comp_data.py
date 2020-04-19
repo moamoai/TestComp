@@ -1,6 +1,6 @@
 type_list   = ["w", "rand", "file"]
 length_list = [
-  0,
+#  0,
   4,
   16,
   256,
@@ -13,8 +13,11 @@ import zlib
 import lz4.frame
 from comp_lib import *
 import time
+import zstd
 
-lib_list = ["zlib", "lz4"]
+# lib_list = ["zlib", "lz4", "zstd"]
+lib_list = ["zstd"]
+# lib_list = ["lz4"]
 for lib in lib_list:
   print("#####################")
   print("# " + lib)
@@ -35,6 +38,8 @@ for lib in lib_list:
         # t = zlib.compress(byte_data, -1)
         if(lib=="zlib"):
           t = zlib.compress(byte_data)
+        elif(lib=="zstd"):
+          t = zstd.compress(byte_data, 1)
         else:
           t = lz4.frame.compress(byte_data)
         comp_time = time.time() - start
@@ -45,6 +50,8 @@ for lib in lib_list:
         start = time.time()
         if(lib=="zlib"):
           s = zlib.decompress(t)
+        elif(lib=="zstd"):
+          s = zstd.decompress(t)
         else:
           s = lz4.frame.decompress(t)
 
